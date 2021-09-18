@@ -37,6 +37,10 @@ func loadTheEnv() {
 }
 
 func createDBInstance() {
+	var cred options.Credential
+
+	cred.Username = os.Getenv("MONGO_INITDB_ROOT_USERNAME")
+	cred.Password = os.Getenv("MONGO_INITDB_ROOT_PASSWORD")
 	// DB connection string
 	connectionString := os.Getenv("DB_URI")
 
@@ -47,7 +51,7 @@ func createDBInstance() {
 	collName := os.Getenv("DB_COLLECTION_NAME")
 
 	// Set client options
-	clientOptions := options.Client().ApplyURI(connectionString)
+	clientOptions := options.Client().ApplyURI(connectionString).SetAuth(cred)
 
 	// connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), clientOptions)
